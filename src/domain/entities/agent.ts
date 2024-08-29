@@ -1,11 +1,17 @@
 import {randomUUID} from "node:crypto"
+import { UniqueId } from "./unique-id";
+
+export interface AgentProps{
+    name: string;
+}
 
 export class  Agent {
-    public id: string;
+    public id: UniqueId;
 	public name: string;
 
-	constructor(name: string, id?: string) {
-        this.id = id ?? randomUUID();
-        this.name = name;
+	constructor(props: AgentProps, id?: UniqueId) {
+        this.id = id ?? new UniqueId(randomUUID());
+        
+        Object.assign(this, props);
     }
 }
