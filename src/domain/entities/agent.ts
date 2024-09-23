@@ -1,17 +1,32 @@
-import {randomUUID} from "node:crypto"
-import { UniqueId } from "./unique-id";
+import { Entity } from "@/core/entities/entity";
+import { Optional } from "@/core/types/optional";
 
-export interface AgentProps{
-    name: string;
+
+export interface AgentProps {
+	name: string;
+	createdAt: Date;
+	updatedAt?: Date;
 }
 
-export class  Agent {
-    public id: UniqueId;
-	public name: string;
+export class Agent extends Entity<AgentProps> {
+	get name(){
+		return this.props.name;
+	}
 
-	constructor(props: AgentProps, id?: UniqueId) {
-        this.id = id ?? new UniqueId(randomUUID());
-        
-        Object.assign(this, props);
-    }
+	get createdAt(){
+		return this.props.createdAt;
+	}
+
+	get updatedAt(){
+		return this.props.updatedAt;
+	}
+
+	static create(props: Optional<AgentProps, 'createdAt'>){
+		const newData = new Agent({
+			...props,
+			createdAt: new Date(),
+		})
+
+		return newData;
+	}
 }

@@ -1,22 +1,23 @@
+// import { UniqueId } from "@/core/entities/unique-id";
+import { UniqueId } from "../../core/entities/unique-id";
 import { Message } from "../entities/message";
-import {  FromMessageAttribute, MessageSender } from "../entities/value-objects/from-message-attribute";
+import {  FromMessageAttribute, MessageSenderTypes } from "../entities/value-objects/from-message-attribute";
 import { MessagesRepository } from "../repositories/messages-repository";
 
 interface SendMessageUseCaseRequest{
     content: string;
-    clientId: string;
-    agentId: string;
-    sender: MessageSender
+    senderId: string;
+    sender: MessageSenderTypes
 }
 
 export class SendMessageUseCase{
     constructor(private messagesRepository: MessagesRepository){}
 
-    async execute({content, clientId, agentId, sender}: SendMessageUseCaseRequest){
-        const message = new Message({
+    async execute({content, senderId, sender}: SendMessageUseCaseRequest){
+        const message = Message.create({
             content,
             from: FromMessageAttribute.create({
-                id: sender === "client" ? clientId : agentId,
+                senderId: new UniqueId(senderId),
                 sender
             })
         });
