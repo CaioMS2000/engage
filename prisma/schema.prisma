@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Client {
+  id            String         @id @default(uuid())
+  name          String
+  phoneNumber   String         @unique @map("phone_number")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  conversations Conversation[]
+  messages      Message[]
+
+  @@map("clients")
+}
+
+model Agent {
+  id            String         @id @default(uuid())
+  name          String
+  email         String         @unique
+  passwordHash  String         @map("password_hash")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  conversations Conversation[]
+  messages      Message[]
+
+  @@map("agents")
+}
+
+enum MessageFrom {
+  Agent
+  Client
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  content        String
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  conversationId String       @map("conversation_id")
+  client         Client?      @relation(fields: [clientId], references: [id])
+  agentt         Agent?       @relation(fields: [agentId], references: [id])
+  clientId       String?      @map("client_id")
+  agentId        String?      @map("agent_id")
+  from           MessageFrom
+
+  @@map("messages")
+}
+
+model Conversation {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  client    Client    @relation(fields: [clientId], references: [id])
+  agent     Agent     @relation(fields: [agentId], references: [id])
+  clientId  String    @map("client_id")
+  agentId   String    @map("agent_id")
+  messages  Message[]
+}

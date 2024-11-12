@@ -1,0 +1,30 @@
+{
+  "name": "engage",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "tsx watch --env-file .env src/server.ts",
+    "start": "node --env-file=.env build/server.js",
+    "build": "tsup src --out-dir build",
+    "prepare": "husky"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@biomejs/biome": "1.9.3",
+    "@types/node": "^22.9.0",
+    "husky": "^9.1.6",
+    "lint-staged": "^12.3.2",
+    "prisma": "^5.22.0",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "fastify": "^5.1.0",
+    "zod": "^3.23.8"
+  }
+}

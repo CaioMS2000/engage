@@ -6,5 +6,8 @@
         "activityBar.background": "#0C286B",
         "titleBar.activeBackground": "#103896",
         "titleBar.activeForeground": "#F9FBFE"
-    }
+    },
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
 }
