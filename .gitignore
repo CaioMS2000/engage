@@ -1,8 +1,0 @@
-build
-dist
-.vscode
-node_modules
-.env
-**/*migration*
-coverage
-tests.ts
