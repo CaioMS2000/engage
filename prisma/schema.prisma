@@ -7,59 +7,98 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Client {
-  id            String         @id @default(uuid())
-  name          String
-  phoneNumber   String         @unique @map("phone_number")
-  createdAt     DateTime       @default(now()) @map("created_at")
-  updatedAt     DateTime       @updatedAt @map("updated_at")
-  conversations Conversation[]
-  messages      Message[]
+model Company {
+  id        String   @id @default(uuid())
+  name      String
+  email     String?
+  phone     String   @unique
+  cnpj      String   @unique
+  aiConfig  String?     @map("ai_config")
+  chats     Chat[]   @relation("company-chat")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
 
-  @@map("clients")
+model Client {
+  id        String   @id @default(uuid())
+  name      String
+  email     String?
+  phone     String   @unique // since this application is dealing with WhatsApp conversations, we can assume that the phone number is unique and always present
+  chats     Chat[]   @relation("client-chat")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+enum AgentStatus {
+  ACTIVE
+  INACTIVE
+
+  @@map("agent-status")
+}
+
+enum AgentType {
+  AI
+  PERSON
+
+  @@map("agent-type")
 }
 
 model Agent {
-  id            String         @id @default(uuid())
-  name          String
-  email         String         @unique
-  passwordHash  String         @map("password_hash")
-  createdAt     DateTime       @default(now()) @map("created_at")
-  updatedAt     DateTime       @updatedAt @map("updated_at")
-  conversations Conversation[]
-  messages      Message[]
-
-  @@map("agents")
+  id        String        @id @default(uuid()) @map("id")
+  name      String
+  type      AgentType
+  status    AgentStatus
+  messages  Message[]
+  switches  AgentSwitch[]
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
 }
 
-enum MessageFrom {
-  Agent
-  Client
+enum ChatStatus {
+  OPEN
+  CLOSED
+
+  @@map("chat-status")
+}
+
+model Chat {
+  id        String        @id @default(uuid())
+  companyId String        @map("company_id")
+  clientId  String        @map("client_id")
+  status    ChatStatus
+  messages  Message[]
+  switches  AgentSwitch[]
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+
+  company Company @relation("company-chat", fields: [companyId], references: [id])
+  client  Client  @relation("client-chat", fields: [clientId], references: [id])
+}
+
+enum AuthorType {
+  CLIENT
+  AGENT
 }
 
 model Message {
-  id             String       @id @default(uuid())
-  content        String
-  createdAt      DateTime     @default(now()) @map("created_at")
-  updatedAt      DateTime     @updatedAt @map("updated_at")
-  conversation   Conversation @relation(fields: [conversationId], references: [id])
-  conversationId String       @map("conversation_id")
-  client         Client?      @relation(fields: [clientId], references: [id])
-  agentt         Agent?       @relation(fields: [agentId], references: [id])
-  clientId       String?      @map("client_id")
-  agentId        String?      @map("agent_id")
-  from           MessageFrom
+  id         String     @id @default(uuid())
+  chatId     String     @map("chat_id")
+  authorId   String?    @map("autor_id")
+  authorType AuthorType @map("author_type")
+  content    String
+  sentAt     DateTime   @default(now()) @map("sent_at")
 
-  @@map("messages")
+  chat   Chat   @relation(fields: [chatId], references: [id])
+  author Agent? @relation(fields: [authorId], references: [id]) // Can be null if it's a client
 }
 
-model Conversation {
+model AgentSwitch {
   id        String    @id @default(uuid())
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  client    Client    @relation(fields: [clientId], references: [id])
-  agent     Agent     @relation(fields: [agentId], references: [id])
-  clientId  String    @map("client_id")
+  chatId    String    @map("chat_id")
   agentId   String    @map("agent_id")
-  messages  Message[]
+  startDate DateTime  @default(now()) @map("start_date")
+  endDate   DateTime? @map("end_date")
+
+  chat  Chat  @relation(fields: [chatId], references: [id])
+  agent Agent @relation(fields: [agentId], references: [id])
 }
