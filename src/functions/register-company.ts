@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma'
+import { PrismaCompanyRepository } from '@/repositories/prisma-company-repository'
 
 interface RgisterRequest {
   name: string
@@ -21,7 +22,7 @@ export async function registerCompany(data: RgisterRequest) {
     throw new Error('Company already registered')
   }
 
-  await prisma.company.create({
-    data,
-  })
+  const prismaCompanyRepository = new PrismaCompanyRepository()
+
+  return prismaCompanyRepository.create(data)
 }
