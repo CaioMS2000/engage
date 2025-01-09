@@ -4,8 +4,8 @@
 		"enabled": true
 	},
 	"formatter": {
-		"indentStyle": "space",
-		"indentWidth": 2,
+		"indentStyle": "tab",
+		"indentWidth": 1,
 		"lineWidth": 80
 	},
 	"javascript": {
@@ -24,37 +24,44 @@
 			"style": {
 				"noNonNullAssertion": "off",
 				"useSelfClosingElements": "off",
-				"useImportType":"off",
+				"useImportType": "off",
 				"noUselessElse": "off"
 			},
 			"suspicious": {
 				"noExplicitAny": "off",
-				"noArrayIndexKey":"warn"
+				"noArrayIndexKey": "warn"
 			},
-			"complexity":{
+			"complexity": {
 				"noStaticOnlyClass": "off",
 				"noForEach": "off",
 				"useOptionalChain": "info"
 			},
-			"a11y":{
-				"useValidAnchor":"warn",
-				"useButtonType":"off",
+			"a11y": {
+				"useValidAnchor": "warn",
+				"useButtonType": "off",
 				"noLabelWithoutControl": "warn"
 			},
-			"correctness":{
-				"useExhaustiveDependencies":"warn",
-				"noUnreachable":"warn",
+			"correctness": {
+				"useExhaustiveDependencies": "warn",
+				"noUnreachable": "warn",
 				"noSwitchDeclarations": "info"
 			},
-			"security":{
-				"noDangerouslySetInnerHtml":"warn"
+			"security": {
+				"noDangerouslySetInnerHtml": "warn"
 			},
-			"nursery":{
+			"nursery": {
 				"useSortedClasses": "info"
 			}
 		}
 	},
 	"files": {
-		"ignore": ["node_modules", "tsconfig*.json", "public/*", "src/prisma", "*.json", "*.config.ts"]
+		"ignore": [
+			"node_modules",
+			"tsconfig*.json",
+			"public/*",
+			"src/prisma",
+			"*.json",
+			"*.config.ts"
+		]
 	}
 }
