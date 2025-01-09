@@ -1,28 +1,25 @@
-import { prisma } from '@/lib/prisma'
-import { PrismaCompanyRepository } from '@/repositories/prisma-company-repository'
+import { CompanyRepository } from '@/repositories/company-repository'
 
-interface RgisterRequest {
-  name: string
-  email?: string
-  phone: string
-  cnpj: string
-  aiConfig?: string
+interface RgisterCompanyRequest {
+	name: string
+	email?: string
+	phone: string
+	cnpj: string
+	aiConfig?: string
 }
 
-export async function registerCompany(data: RgisterRequest) {
-  const { cnpj } = data
+export class RgisterCompany {
+	constructor(private companyRepository: CompanyRepository) {}
 
-  const companyWithSameCNPJ = await prisma.company.findUnique({
-    where: {
-      cnpj,
-    },
-  })
+	async exec(data: RgisterCompanyRequest) {
+		const { cnpj } = data
 
-  if (companyWithSameCNPJ) {
-    throw new Error('Company already registered')
-  }
+		const companyWithSameCNPJ = await this.companyRepository.findByCNPJ(cnpj)
 
-  const prismaCompanyRepository = new PrismaCompanyRepository()
+		if (companyWithSameCNPJ) {
+			throw new Error('Company already registered')
+		}
 
-  return prismaCompanyRepository.create(data)
+		return this.companyRepository.create(data)
+	}
 }
