@@ -8,12 +8,14 @@ export async function registerCompanyController(
 ) {
   const registerCompanyBodySchema = z.object({
     name: z.string(),
-    email: z.string().email(),
+    email: z.string().email().optional(),
     phone: z.string(),
-    cnpj: z.string(),
-    aiConfig: z.string(),
+    cnpj: z
+      .string()
+      .length(14, { message: 'CNPJ deve ter 14 dígitos' })
+      .regex(/^\d+$/, { message: 'CNPJ deve conter apenas números' }),
+    aiConfig: z.string().optional(),
   })
-
   const data = registerCompanyBodySchema.parse(request.body)
 
   try {

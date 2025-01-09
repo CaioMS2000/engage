@@ -2,10 +2,10 @@ import { prisma } from '@/lib/prisma'
 
 interface RgisterRequest {
   name: string
-  email: string
+  email?: string
   phone: string
   cnpj: string
-  aiConfig: string
+  aiConfig?: string
 }
 
 export async function registerCompany(data: RgisterRequest) {
