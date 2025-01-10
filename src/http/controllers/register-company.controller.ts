@@ -2,7 +2,7 @@ import { CompanyAlreadyExistsError } from '@/functions/errors/company-already-ex
 import { RgisterCompany } from '@/functions/register-company'
 import { PrismaCompanyRepository } from '@/repositories/prisma/prisma-company-repository'
 import { FastifyReply, FastifyRequest } from 'fastify'
-import z from 'zod'
+import { z } from 'zod'
 
 export async function registerCompanyController(
 	request: FastifyRequest,
