@@ -15,6 +15,8 @@ if (process.env.NODE_ENV === 'production') {
 		global.cachedPrism = new PrismaClient({
 			log: env.NODE_ENV === 'dev' ? ['query'] : [],
 		})
+
+		console.log('\x1b[32m[NEW DATABASE CONNECTION]\x1b[0m')
 	}
 	prisma = global.cachedPrism
 }
