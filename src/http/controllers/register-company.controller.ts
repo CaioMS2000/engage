@@ -1,3 +1,4 @@
+import { CompanyAlreadyExistsError } from '@/functions/errors/company-already-exists'
 import { RgisterCompany } from '@/functions/register-company'
 import { PrismaCompanyRepository } from '@/repositories/prisma/prisma-company-repository'
 import { FastifyReply, FastifyRequest } from 'fastify'
@@ -31,7 +32,11 @@ export async function registerCompanyController(
 			aiConfig: data.aiConfig,
 		})
 	} catch (err) {
-		return reply.status(409).send()
+		if (err instanceof CompanyAlreadyExistsError) {
+			return reply.status(409).send({ message: err.message })
+		}
+
+		throw err
 	}
 
 	return reply.status(201).send()

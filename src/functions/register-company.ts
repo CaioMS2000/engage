@@ -1,4 +1,5 @@
 import { CompanyRepository } from '@/repositories/company-repository'
+import { CompanyAlreadyExistsError } from './errors/company-already-exists'
 
 interface RgisterCompanyRequest {
 	name: string
@@ -17,7 +18,7 @@ export class RgisterCompany {
 		const companyWithSameCNPJ = await this.companyRepository.findByCNPJ(cnpj)
 
 		if (companyWithSameCNPJ) {
-			throw new Error('Company already registered')
+			throw new CompanyAlreadyExistsError()
 		}
 
 		return this.companyRepository.create(data)
