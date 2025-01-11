@@ -33,6 +33,8 @@ prisma/migrations/
 
 # vscode
 .vscode/
+.vscode
 
 # mine
 /old
+/.husky/_
