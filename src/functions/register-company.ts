@@ -1,4 +1,5 @@
 import { CompanyRepository } from '@/repositories/company-repository'
+import type { Company } from '@prisma/client'
 import { CompanyAlreadyExistsError } from './errors/company-already-exists'
 
 interface RgisterCompanyRequest {
@@ -9,10 +10,14 @@ interface RgisterCompanyRequest {
 	aiConfig?: string
 }
 
-export class RgisterCompany {
+interface RegisterCompanyResponse {
+	company: Company
+}
+
+export class RegisterCompany {
 	constructor(private companyRepository: CompanyRepository) {}
 
-	async exec(data: RgisterCompanyRequest) {
+	async exec(data: RgisterCompanyRequest): Promise<RegisterCompanyResponse> {
 		const { cnpj } = data
 
 		const companyWithSameCNPJ = await this.companyRepository.findByCNPJ(cnpj)
@@ -21,6 +26,10 @@ export class RgisterCompany {
 			throw new CompanyAlreadyExistsError()
 		}
 
-		return this.companyRepository.create(data)
+		const company = await this.companyRepository.create(data)
+
+		return {
+			company,
+		}
 	}
 }

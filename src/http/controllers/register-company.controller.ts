@@ -1,5 +1,5 @@
 import { CompanyAlreadyExistsError } from '@/functions/errors/company-already-exists'
-import { RgisterCompany } from '@/functions/register-company'
+import { RegisterCompany } from '@/functions/register-company'
 import { PrismaCompanyRepository } from '@/repositories/prisma/prisma-company-repository'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
@@ -22,7 +22,7 @@ export async function registerCompanyController(
 
 	try {
 		const companyRepository = new PrismaCompanyRepository()
-		const registerCompany = new RgisterCompany(companyRepository)
+		const registerCompany = new RegisterCompany(companyRepository)
 
 		await registerCompany.exec({
 			cnpj: data.cnpj,
