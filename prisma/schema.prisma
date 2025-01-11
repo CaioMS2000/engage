@@ -13,10 +13,11 @@ model Company {
   email     String?
   phone     String   @unique
   cnpj      String   @unique
-  aiConfig  String?     @map("ai_config")
+  aiConfig  String?  @map("ai_config")
   chats     Chat[]   @relation("company-chat")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  agents     Agent[]
 }
 
 model Client {
@@ -50,6 +51,8 @@ model Agent {
   status    AgentStatus
   messages  Message[]
   switches  AgentSwitch[]
+  company   Company       @relation(fields: [companyId], references: [id])
+  companyId String        @map("company_id")
   createdAt DateTime      @default(now()) @map("created_at")
   updatedAt DateTime      @updatedAt @map("updated_at")
 }
