@@ -45,16 +45,19 @@ enum AgentType {
 }
 
 model Agent {
-  id        String        @id @default(uuid()) @map("id")
-  name      String
-  type      AgentType
-  status    AgentStatus   @default(INACTIVE)
-  messages  Message[]
-  switches  AgentSwitch[]
-  company   Company       @relation(fields: [companyId], references: [id])
-  companyId String        @map("company_id")
-  createdAt DateTime      @default(now()) @map("created_at")
-  updatedAt DateTime      @updatedAt @map("updated_at")
+  id           String        @id @default(uuid()) @map("id")
+  name         String
+  email        String        @unique
+  username     String        @unique
+  passwordHash String        @map("password_hash")
+  type         AgentType
+  status       AgentStatus   @default(INACTIVE)
+  messages     Message[]
+  switches     AgentSwitch[]
+  company      Company       @relation(fields: [companyId], references: [id])
+  companyId    String        @map("company_id")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
 }
 
 enum ChatStatus {
