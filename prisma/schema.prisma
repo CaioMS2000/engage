@@ -17,7 +17,7 @@ model Company {
   chats     Chat[]   @relation("company-chat")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  agents     Agent[]
+  agents    Agent[]
 }
 
 model Client {
@@ -48,7 +48,7 @@ model Agent {
   id        String        @id @default(uuid()) @map("id")
   name      String
   type      AgentType
-  status    AgentStatus
+  status    AgentStatus   @default(INACTIVE)
   messages  Message[]
   switches  AgentSwitch[]
   company   Company       @relation(fields: [companyId], references: [id])
