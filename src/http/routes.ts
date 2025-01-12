@@ -4,5 +4,5 @@ import { registerCompanyController } from './controllers/register-company.contro
 
 export async function appRoutes(app: FastifyInstance) {
 	app.post('/company', registerCompanyController)
-	app.post('/sessions', authenticateAgentController)
+	app.post('/sessions/agent', authenticateAgentController)
 }
