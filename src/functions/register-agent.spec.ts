@@ -1,16 +1,22 @@
 import { InMemoryAgentRepository } from '@/repositories/in-memory/in-memory-agent-repository'
 import { compare } from 'bcryptjs'
-import { describe, expect, test } from 'vitest'
+import { beforeEach, describe, expect, test } from 'vitest'
 import {
 	AgentEmailAlreadyInUseError,
 	AgentUsernameAlreadyInUseError,
 } from './errors/agent-already-exists'
 import { RegisterAgent } from './register-agent'
 
+let agentRepository: InMemoryAgentRepository
+let registerAgent: RegisterAgent
+
 describe('Register Agent', () => {
+	beforeEach(() => {
+		agentRepository = new InMemoryAgentRepository()
+		registerAgent = new RegisterAgent(agentRepository)
+	})
+
 	test('should be able to register', async () => {
-		const agentRepository = new InMemoryAgentRepository()
-		const registerAgent = new RegisterAgent(agentRepository)
 		const { agent } = await registerAgent.exec({
 			name: 'John Doe',
 			email: 'johndoe@example.com',
@@ -24,8 +30,6 @@ describe('Register Agent', () => {
 	})
 
 	test('should hash user password upon registration', async () => {
-		const agentRepository = new InMemoryAgentRepository()
-		const registerAgent = new RegisterAgent(agentRepository)
 		const { agent } = await registerAgent.exec({
 			name: 'John Doe',
 			email: 'johndoe@example.com',
@@ -40,8 +44,6 @@ describe('Register Agent', () => {
 	})
 
 	test('should not be able to register with same email twice', async () => {
-		const agentRepository = new InMemoryAgentRepository()
-		const registerAgent = new RegisterAgent(agentRepository)
 		const email = 'johndoe@example.com'
 
 		await registerAgent.exec({
@@ -66,8 +68,6 @@ describe('Register Agent', () => {
 	})
 
 	test('should not be able to register with same username twice', async () => {
-		const agentRepository = new InMemoryAgentRepository()
-		const registerAgent = new RegisterAgent(agentRepository)
 		const username = 'johndoe'
 
 		await registerAgent.exec({

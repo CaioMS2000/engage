@@ -1,18 +1,22 @@
 import { InMemoryAgentRepository } from '@/repositories/in-memory/in-memory-agent-repository'
 import { InMemoryCompanyRepository } from '@/repositories/in-memory/in-memory-company-repository'
 import { hash } from 'bcryptjs'
-import { describe, expect, test } from 'vitest'
+import { beforeEach, describe, expect, test } from 'vitest'
 import { AuthenticateAgent } from './authenticate-agent'
 import { InvalidCredentialsError } from './errors/invalid-credentials-error'
 
+let agentRepository: InMemoryAgentRepository
+let companyRepository: InMemoryCompanyRepository
+let authenticateAgent: AuthenticateAgent
+
 describe('Authenticate Agent', () => {
+	beforeEach(() => {
+		agentRepository = new InMemoryAgentRepository()
+		companyRepository = new InMemoryCompanyRepository()
+		authenticateAgent = new AuthenticateAgent(agentRepository, companyRepository)
+	})
+
 	test('should be able to authenticate', async () => {
-		const agentRepository = new InMemoryAgentRepository()
-		const companyRepository = new InMemoryCompanyRepository()
-		const authenticateAgent = new AuthenticateAgent(
-			agentRepository,
-			companyRepository
-		)
 		const company = await companyRepository.create({
 			id: 'company-1',
 			name: 'Company 1',
@@ -41,12 +45,6 @@ describe('Authenticate Agent', () => {
 	})
 
 	test('should not be able to authenticate with wrong email', async () => {
-		const agentRepository = new InMemoryAgentRepository()
-		const companyRepository = new InMemoryCompanyRepository()
-		const authenticateAgent = new AuthenticateAgent(
-			agentRepository,
-			companyRepository
-		)
 		const company = await companyRepository.create({
 			id: 'company-1',
 			name: 'Company 1',
@@ -77,12 +75,6 @@ describe('Authenticate Agent', () => {
 	})
 
 	test('should not be able to authenticate with wrong password', async () => {
-		const agentRepository = new InMemoryAgentRepository()
-		const companyRepository = new InMemoryCompanyRepository()
-		const authenticateAgent = new AuthenticateAgent(
-			agentRepository,
-			companyRepository
-		)
 		const company = await companyRepository.create({
 			id: 'company-1',
 			name: 'Company 1',
