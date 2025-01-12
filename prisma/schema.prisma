@@ -15,19 +15,37 @@ model Company {
   cnpj      String   @unique
   aiConfig  String?  @map("ai_config")
   chats     Chat[]   @relation("company-chat")
+  agents    Agent[]
+  admins    Admin[]
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  agents    Agent[]
+
+  @@map("company")
+}
+
+model Admin {
+  id           String    @id @default(uuid())
+  name         String
+  email        String    @unique
+  username     String    @unique
+  passwordHash String    @map("password_hash")
+  companies    Company[]
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  @@map("admin")
 }
 
 model Client {
   id        String   @id @default(uuid())
   name      String
   email     String?
-  phone     String   @unique // since this application is dealing with WhatsApp conversations, we can assume that the phone number is unique and always present
+  phone     String   @unique
   chats     Chat[]   @relation("client-chat")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("client")
 }
 
 enum AgentStatus {
@@ -45,7 +63,7 @@ enum AgentType {
 }
 
 model Agent {
-  id           String        @id @default(uuid()) @map("id")
+  id           String        @id @default(uuid())
   name         String
   email        String        @unique
   username     String        @unique
@@ -58,13 +76,8 @@ model Agent {
   companyId    String        @map("company_id")
   createdAt    DateTime      @default(now()) @map("created_at")
   updatedAt    DateTime      @updatedAt @map("updated_at")
-}
 
-enum ChatStatus {
-  OPEN
-  CLOSED
-
-  @@map("chat-status")
+  @@map("agent")
 }
 
 model Chat {
@@ -79,23 +92,37 @@ model Chat {
 
   company Company @relation("company-chat", fields: [companyId], references: [id])
   client  Client  @relation("client-chat", fields: [clientId], references: [id])
+
+  @@map("chat")
+}
+
+enum ChatStatus {
+  OPEN
+  CLOSED
+
+  @@map("chat-status")
 }
 
 enum AuthorType {
   CLIENT
   AGENT
+  ADMIN
+
+  @@map("author-type")
 }
 
 model Message {
   id         String     @id @default(uuid())
   chatId     String     @map("chat_id")
-  authorId   String?    @map("autor_id")
+  authorId   String?    @map("author_id")
   authorType AuthorType @map("author_type")
   content    String
   sentAt     DateTime   @default(now()) @map("sent_at")
 
   chat   Chat   @relation(fields: [chatId], references: [id])
-  author Agent? @relation(fields: [authorId], references: [id]) // Can be null if it's a client
+  author Agent? @relation(fields: [authorId], references: [id])
+
+  @@map("message")
 }
 
 model AgentSwitch {
@@ -107,4 +134,6 @@ model AgentSwitch {
 
   chat  Chat  @relation(fields: [chatId], references: [id])
   agent Agent @relation(fields: [agentId], references: [id])
+
+  @@map("agent_switch")
 }
