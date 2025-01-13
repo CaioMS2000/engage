@@ -1,22 +1,26 @@
+import { randomUUID } from 'node:crypto'
 import { Admin, Agent, Company, Prisma } from '@prisma/client'
 import { CompanyRepository } from '../company-repository'
 
 export class InMemoryCompanyRepository implements CompanyRepository {
-	private items: Company[] = []
+	public items: (Company & {
+		agents: Agent[]
+		admins: Admin[]
+	})[] = []
 
 	create(data: Prisma.CompanyCreateInput): Promise<Company> {
 		const company: Company = {
+			id: randomUUID(),
 			cnpj: data.cnpj,
 			aiConfig: data.aiConfig,
 			name: data.name,
-			id: 'any-id',
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			email: data.email,
 			phone: data.phone,
 		}
 
-		this.items.push(company)
+		this.items.push({ ...company, agents: [], admins: [] })
 
 		return Promise.resolve(company)
 	}
@@ -40,8 +44,6 @@ export class InMemoryCompanyRepository implements CompanyRepository {
 
 		const fullCompany = {
 			...company,
-			agents: [],
-			admins: [],
 		}
 
 		return Promise.resolve(fullCompany)

@@ -11,8 +11,8 @@ let authenticateAgent: AuthenticateAgent
 
 describe('Authenticate Agent', () => {
 	beforeEach(() => {
-		agentRepository = new InMemoryAgentRepository()
 		companyRepository = new InMemoryCompanyRepository()
+		agentRepository = new InMemoryAgentRepository(companyRepository)
 		authenticateAgent = new AuthenticateAgent(agentRepository, companyRepository)
 	})
 
@@ -46,7 +46,6 @@ describe('Authenticate Agent', () => {
 
 	test('should not be able to authenticate with wrong email', async () => {
 		const company = await companyRepository.create({
-			id: 'company-1',
 			name: 'Company 1',
 			cnpj: '12345678901234',
 			phone: '12345678901',

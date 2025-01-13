@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto'
 import { Admin, Prisma } from '@prisma/client'
 import { AdminRepository } from '../admin-repository'
 
@@ -6,7 +7,7 @@ export class InMemoryAdminRepository implements AdminRepository {
 
 	create(data: Prisma.AdminCreateInput): Promise<Admin> {
 		const admin: Admin = {
-			id: 'any-id',
+			id: randomUUID(),
 			name: data.name,
 			email: data.email,
 			username: data.username,

@@ -1,4 +1,5 @@
 import { InMemoryAgentRepository } from '@/repositories/in-memory/in-memory-agent-repository'
+import { InMemoryCompanyRepository } from '@/repositories/in-memory/in-memory-company-repository'
 import { compare } from 'bcryptjs'
 import { beforeEach, describe, expect, test } from 'vitest'
 import {
@@ -8,21 +9,28 @@ import {
 import { RegisterAgent } from './register-agent'
 
 let agentRepository: InMemoryAgentRepository
+let companyRepository: InMemoryCompanyRepository
 let registerAgent: RegisterAgent
 
 describe('Register Agent', () => {
 	beforeEach(() => {
-		agentRepository = new InMemoryAgentRepository()
+		companyRepository = new InMemoryCompanyRepository()
+		agentRepository = new InMemoryAgentRepository(companyRepository)
 		registerAgent = new RegisterAgent(agentRepository)
 	})
 
 	test('should be able to register', async () => {
+		const company = await companyRepository.create({
+			name: 'Company 1',
+			cnpj: '12345678901234',
+			phone: '12345678901',
+		})
 		const { agent } = await registerAgent.exec({
 			name: 'John Doe',
 			email: 'johndoe@example.com',
 			username: 'johndoe',
 			password: '123456',
-			companyId: 'any-id',
+			companyId: company.id,
 			type: 'PERSON',
 		})
 
@@ -30,12 +38,17 @@ describe('Register Agent', () => {
 	})
 
 	test('should hash user password upon registration', async () => {
+		const company = await companyRepository.create({
+			name: 'Company 1',
+			cnpj: '12345678901234',
+			phone: '12345678901',
+		})
 		const { agent } = await registerAgent.exec({
 			name: 'John Doe',
 			email: 'johndoe@example.com',
 			username: 'johndoe',
 			password: '123456',
-			companyId: 'any-id',
+			companyId: company.id,
 			type: 'PERSON',
 		})
 		const isPasswordCorrectlyHashed = await compare('123456', agent.passwordHash)
@@ -44,6 +57,11 @@ describe('Register Agent', () => {
 	})
 
 	test('should not be able to register with same email twice', async () => {
+		const company = await companyRepository.create({
+			name: 'Company 1',
+			cnpj: '12345678901234',
+			phone: '12345678901',
+		})
 		const email = 'johndoe@example.com'
 
 		await registerAgent.exec({
@@ -51,7 +69,7 @@ describe('Register Agent', () => {
 			email: email,
 			username: 'johndoe',
 			password: '123456',
-			companyId: 'any-id',
+			companyId: company.id,
 			type: 'PERSON',
 		})
 
@@ -61,13 +79,18 @@ describe('Register Agent', () => {
 				email: email,
 				username: 'johndoe2',
 				password: '123456',
-				companyId: 'any-id',
+				companyId: company.id,
 				type: 'PERSON',
 			})
 		).rejects.toBeInstanceOf(AgentEmailAlreadyInUseError)
 	})
 
 	test('should not be able to register with same username twice', async () => {
+		const company = await companyRepository.create({
+			name: 'Company 1',
+			cnpj: '12345678901234',
+			phone: '12345678901',
+		})
 		const username = 'johndoe'
 
 		await registerAgent.exec({
@@ -75,7 +98,7 @@ describe('Register Agent', () => {
 			email: 'johndoe@example.com',
 			username: username,
 			password: '123456',
-			companyId: 'any-id',
+			companyId: company.id,
 			type: 'PERSON',
 		})
 
@@ -85,7 +108,7 @@ describe('Register Agent', () => {
 				email: 'johndoe2@example.com',
 				username: username,
 				password: '123456',
-				companyId: 'any-id',
+				companyId: company.id,
 				type: 'PERSON',
 			})
 		).rejects.toBeInstanceOf(AgentUsernameAlreadyInUseError)
