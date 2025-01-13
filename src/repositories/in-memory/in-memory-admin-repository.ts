@@ -1,9 +1,9 @@
 import { randomUUID } from 'node:crypto'
-import { Admin, Prisma } from '@prisma/client'
+import type { Admin, Company, Prisma } from '@prisma/client'
 import { AdminRepository } from '../admin-repository'
 
 export class InMemoryAdminRepository implements AdminRepository {
-	private items: Admin[] = []
+	public items: (Admin & { companies: Company[] })[] = []
 
 	create(data: Prisma.AdminCreateInput): Promise<Admin> {
 		const admin: Admin = {
@@ -16,7 +16,7 @@ export class InMemoryAdminRepository implements AdminRepository {
 			updatedAt: new Date(),
 		}
 
-		this.items.push(admin)
+		this.items.push({ ...admin, companies: [] })
 
 		return Promise.resolve(admin)
 	}

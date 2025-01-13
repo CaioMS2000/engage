@@ -1,6 +1,7 @@
+import { InMemoryAdminRepository } from '@/repositories/in-memory/in-memory-admin-repository'
 import { InMemoryAgentRepository } from '@/repositories/in-memory/in-memory-agent-repository'
 import { InMemoryCompanyRepository } from '@/repositories/in-memory/in-memory-company-repository'
-import { compare } from 'bcryptjs'
+import { compare, hash } from 'bcryptjs'
 import { beforeEach, describe, expect, test } from 'vitest'
 import {
 	AgentEmailAlreadyInUseError,
@@ -8,22 +9,35 @@ import {
 } from './errors/agent-already-exists'
 import { RegisterAgent } from './register-agent'
 
+let adminRepository: InMemoryAdminRepository
 let agentRepository: InMemoryAgentRepository
 let companyRepository: InMemoryCompanyRepository
 let registerAgent: RegisterAgent
 
 describe('Register Agent', () => {
 	beforeEach(() => {
-		companyRepository = new InMemoryCompanyRepository()
+		adminRepository = new InMemoryAdminRepository()
+		companyRepository = new InMemoryCompanyRepository(adminRepository)
 		agentRepository = new InMemoryAgentRepository(companyRepository)
 		registerAgent = new RegisterAgent(agentRepository)
 	})
 
 	test('should be able to register', async () => {
+		const admin = await adminRepository.create({
+			name: 'John Doe',
+			username: 'johndoe',
+			email: 'johndoe@example.com',
+			passwordHash: await hash('123456', 6),
+		})
 		const company = await companyRepository.create({
 			name: 'Company 1',
 			cnpj: '12345678901234',
 			phone: '12345678901',
+			admins: {
+				connect: {
+					id: admin.id,
+				},
+			},
 		})
 		const { agent } = await registerAgent.exec({
 			name: 'John Doe',
@@ -38,10 +52,21 @@ describe('Register Agent', () => {
 	})
 
 	test('should hash user password upon registration', async () => {
+		const admin = await adminRepository.create({
+			name: 'John Doe',
+			username: 'johndoe',
+			email: 'johndoe@example.com',
+			passwordHash: await hash('123456', 6),
+		})
 		const company = await companyRepository.create({
 			name: 'Company 1',
 			cnpj: '12345678901234',
 			phone: '12345678901',
+			admins: {
+				connect: {
+					id: admin.id,
+				},
+			},
 		})
 		const { agent } = await registerAgent.exec({
 			name: 'John Doe',
@@ -57,10 +82,21 @@ describe('Register Agent', () => {
 	})
 
 	test('should not be able to register with same email twice', async () => {
+		const admin = await adminRepository.create({
+			name: 'John Doe',
+			username: 'johndoe',
+			email: 'johndoe@example.com',
+			passwordHash: await hash('123456', 6),
+		})
 		const company = await companyRepository.create({
 			name: 'Company 1',
 			cnpj: '12345678901234',
 			phone: '12345678901',
+			admins: {
+				connect: {
+					id: admin.id,
+				},
+			},
 		})
 		const email = 'johndoe@example.com'
 
@@ -86,10 +122,21 @@ describe('Register Agent', () => {
 	})
 
 	test('should not be able to register with same username twice', async () => {
+		const admin = await adminRepository.create({
+			name: 'John Doe',
+			username: 'johndoe',
+			email: 'johndoe@example.com',
+			passwordHash: await hash('123456', 6),
+		})
 		const company = await companyRepository.create({
 			name: 'Company 1',
 			cnpj: '12345678901234',
 			phone: '12345678901',
+			admins: {
+				connect: {
+					id: admin.id,
+				},
+			},
 		})
 		const username = 'johndoe'
 

@@ -9,8 +9,8 @@ let registerCompany: RegisterCompany
 
 describe('Register Company', () => {
 	beforeEach(() => {
-		companyRepository = new InMemoryCompanyRepository()
 		adminRepository = new InMemoryAdminRepository()
+		companyRepository = new InMemoryCompanyRepository(adminRepository)
 		registerCompany = new RegisterCompany(companyRepository, adminRepository)
 	})
 

@@ -1,3 +1,4 @@
+import { InMemoryAdminRepository } from '@/repositories/in-memory/in-memory-admin-repository'
 import { InMemoryAgentRepository } from '@/repositories/in-memory/in-memory-agent-repository'
 import { InMemoryCompanyRepository } from '@/repositories/in-memory/in-memory-company-repository'
 import { hash } from 'bcryptjs'
@@ -6,22 +7,35 @@ import { AuthenticateAgent } from './authenticate-agent'
 import { InvalidCredentialsError } from './errors/invalid-credentials-error'
 
 let agentRepository: InMemoryAgentRepository
+let adminRepository: InMemoryAdminRepository
 let companyRepository: InMemoryCompanyRepository
 let authenticateAgent: AuthenticateAgent
 
 describe('Authenticate Agent', () => {
 	beforeEach(() => {
-		companyRepository = new InMemoryCompanyRepository()
+		adminRepository = new InMemoryAdminRepository()
+		companyRepository = new InMemoryCompanyRepository(adminRepository)
 		agentRepository = new InMemoryAgentRepository(companyRepository)
 		authenticateAgent = new AuthenticateAgent(agentRepository, companyRepository)
 	})
 
 	test('should be able to authenticate', async () => {
+		const admin = await adminRepository.create({
+			name: 'John Doe',
+			username: 'johndoe',
+			email: 'johndoe@example.com',
+			passwordHash: await hash('123456', 6),
+		})
 		const company = await companyRepository.create({
 			id: 'company-1',
 			name: 'Company 1',
 			cnpj: '12345678901234',
 			phone: '12345678901',
+			admins: {
+				connect: {
+					id: admin.id,
+				},
+			},
 		})
 		const preAgent = await agentRepository.create({
 			name: 'John Doe',
@@ -45,10 +59,21 @@ describe('Authenticate Agent', () => {
 	})
 
 	test('should not be able to authenticate with wrong email', async () => {
+		const admin = await adminRepository.create({
+			name: 'John Doe',
+			username: 'johndoe',
+			email: 'johndoe@example.com',
+			passwordHash: await hash('123456', 6),
+		})
 		const company = await companyRepository.create({
 			name: 'Company 1',
 			cnpj: '12345678901234',
 			phone: '12345678901',
+			admins: {
+				connect: {
+					id: admin.id,
+				},
+			},
 		})
 
 		await agentRepository.create({
@@ -74,11 +99,22 @@ describe('Authenticate Agent', () => {
 	})
 
 	test('should not be able to authenticate with wrong password', async () => {
+		const admin = await adminRepository.create({
+			name: 'John Doe',
+			username: 'johndoe',
+			email: 'johndoe@example.com',
+			passwordHash: await hash('123456', 6),
+		})
 		const company = await companyRepository.create({
 			id: 'company-1',
 			name: 'Company 1',
 			cnpj: '12345678901234',
 			phone: '12345678901',
+			admins: {
+				connect: {
+					id: admin.id,
+				},
+			},
 		})
 
 		await agentRepository.create({

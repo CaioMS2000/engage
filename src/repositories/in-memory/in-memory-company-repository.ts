@@ -1,12 +1,15 @@
 import { randomUUID } from 'node:crypto'
 import { Admin, Agent, Company, Prisma } from '@prisma/client'
 import { CompanyRepository } from '../company-repository'
+import { InMemoryAdminRepository } from './in-memory-admin-repository'
 
 export class InMemoryCompanyRepository implements CompanyRepository {
 	public items: (Company & {
 		agents: Agent[]
 		admins: Admin[]
 	})[] = []
+
+	constructor(private adminRepository: InMemoryAdminRepository) {}
 
 	create(data: Prisma.CompanyCreateInput): Promise<Company> {
 		const company: Company = {
@@ -19,8 +22,15 @@ export class InMemoryCompanyRepository implements CompanyRepository {
 			email: data.email,
 			phone: data.phone,
 		}
+		const admin = this.adminRepository.items.find(
+			item => item.id === (data.admins.connect as any).id
+		)
 
-		this.items.push({ ...company, agents: [], admins: [] })
+		if (!admin) {
+			throw new Error('Admin not found')
+		}
+
+		this.items.push({ ...company, agents: [], admins: [admin] })
 
 		return Promise.resolve(company)
 	}
