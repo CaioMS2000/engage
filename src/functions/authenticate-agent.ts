@@ -1,6 +1,6 @@
 import { AgentRepository } from '@/repositories/agent-repository'
 import { CompanyRepository } from '@/repositories/company-repository'
-import { Agent } from '@prisma/client'
+import type { Agent } from '@prisma/client'
 import { compare } from 'bcryptjs'
 import { InvalidCredentialsError } from './errors/invalid-credentials-error'
 import { UserDoesNotBelongToCompanyError } from './errors/user-does-not-belong-to-company-error'

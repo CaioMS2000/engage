@@ -1,5 +1,5 @@
 import { AdminRepository } from '@/repositories/admin-repository'
-import { Admin } from '@prisma/client'
+import type { Admin } from '@prisma/client'
 import { hash } from 'bcryptjs'
 import {
 	UserEmailAlreadyInUseError,

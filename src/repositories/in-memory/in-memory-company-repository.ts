@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto'
-import { Admin, Agent, Company, Prisma } from '@prisma/client'
+import type { Admin, Agent, Company, Prisma } from '@prisma/client'
 import { CompanyRepository } from '../company-repository'
 import { InMemoryAdminRepository } from './in-memory-admin-repository'
 

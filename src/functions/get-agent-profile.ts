@@ -1,6 +1,6 @@
 import { AgentRepository } from '@/repositories/agent-repository'
 import { CompanyRepository } from '@/repositories/company-repository'
-import { Agent } from '@prisma/client'
+import type { Agent } from '@prisma/client'
 import { CompanyNotFoundError } from './errors/company-not-found-error'
 import { UserDoesNotBelongToCompanyError } from './errors/user-does-not-belong-to-company-error'
 import { UserNotFoundError } from './errors/user-not-found-error'
