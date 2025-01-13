@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto'
+import { Entity } from '@/core/entities/entity'
 
 // biome-ignore lint/style/useEnumInitializers:
 enum AuthorType {
@@ -13,37 +13,26 @@ type MessageProps = {
 	authorType: AuthorType
 	content: string
 	sentAt: Date
-	createdAt: Date
-	updatedAt: Date
 }
 
-export class Message {
-	public id: string
-	public chatId: string
-	public authorId: string
-	public authorType: AuthorType
-	public content: string
-	public sentAt: Date
-	public createdAt: Date
-	public updatedAt: Date
+export class Message extends Entity<MessageProps> {
+	get chatId(): string {
+		return this.props.chatId
+	}
 
-	constructor(props: MessageProps, id?: string) {
-		const {
-			chatId,
-			authorId,
-			authorType,
-			content,
-			sentAt,
-			createdAt,
-			updatedAt,
-		} = props
-		this.id = id ?? randomUUID().toString()
-		this.chatId = chatId
-		this.authorId = authorId
-		this.authorType = authorType
-		this.content = content
-		this.sentAt = sentAt
-		this.createdAt = createdAt ?? new Date()
-		this.updatedAt = updatedAt ?? new Date()
+	get authorId(): string {
+		return this.props.authorId
+	}
+
+	get authorType(): AuthorType {
+		return this.props.authorType
+	}
+
+	get content(): string {
+		return this.props.content
+	}
+
+	get sentAt(): Date {
+		return this.props.sentAt
 	}
 }

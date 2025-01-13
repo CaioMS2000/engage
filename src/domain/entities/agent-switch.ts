@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto'
+import { Entity } from '@/core/entities/entity'
 
 type AgentSwitchProps = {
 	chatId: string
@@ -7,19 +7,20 @@ type AgentSwitchProps = {
 	endDate: Date
 }
 
-export class AgentSwitch {
-	public id: string
-	public chatId: string
-	public agentId: string
-	public startDate: Date
-	public endDate: Date
+export class AgentSwitch extends Entity<AgentSwitchProps> {
+	get chatId(): string {
+		return this.props.chatId
+	}
 
-	constructor(props: AgentSwitchProps, id?: string) {
-		const { chatId, agentId, startDate, endDate } = props
-		this.id = id ?? randomUUID().toString()
-		this.chatId = chatId
-		this.agentId = agentId
-		this.startDate = startDate
-		this.endDate = endDate
+	get agentId(): string {
+		return this.props.agentId
+	}
+
+	get startDate(): Date {
+		return this.props.startDate
+	}
+
+	get endDate(): Date {
+		return this.props.endDate
 	}
 }

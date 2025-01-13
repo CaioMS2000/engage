@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto'
+import { Entity } from '@/core/entities/entity'
 
 // biome-ignore lint/style/useEnumInitializers:
 enum AgentType {
@@ -20,43 +20,34 @@ type AgentProps = {
 	type: AgentType
 	status: AgentStatus
 	companyId: string
-	createdAt?: Date
-	updatedAt?: Date
 }
 
-export class Agent {
-	public id: string
-	public name: string
-	public email: string
-	public username: string
-	public passwordHash: string
-	public type: AgentType
-	public status: AgentStatus
-	public companyId: string
-	public createdAt: Date
-	public updatedAt: Date
+export class Agent extends Entity<AgentProps> {
+	get name(): string {
+		return this.props.name
+	}
 
-	constructor(props: AgentProps, id?: string) {
-		const {
-			name,
-			email,
-			username,
-			passwordHash,
-			type,
-			status,
-			companyId,
-			createdAt,
-			updatedAt,
-		} = props
-		this.id = id ?? randomUUID().toString()
-		this.name = name
-		this.email = email
-		this.username = username
-		this.passwordHash = passwordHash
-		this.type = type
-		this.status = status
-		this.companyId = companyId
-		this.createdAt = createdAt ?? new Date()
-		this.updatedAt = updatedAt ?? new Date()
+	get email(): string {
+		return this.props.email
+	}
+
+	get username(): string {
+		return this.props.username
+	}
+
+	get passwordHash(): string {
+		return this.props.passwordHash
+	}
+
+	get type(): AgentType {
+		return this.props.type
+	}
+
+	get status(): AgentStatus {
+		return this.props.status
+	}
+
+	get companyId(): string {
+		return this.props.companyId
 	}
 }

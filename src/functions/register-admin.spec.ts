@@ -20,6 +20,8 @@ describe('Register admin', () => {
 		})
 
 		expect(admin.id).toBeDefined()
-		expect(admin.id).toEqual(expect.any(String))
+		expect(admin.id).toEqual(
+			expect.objectContaining({ value: expect.any(String) })
+		)
 	})
 })

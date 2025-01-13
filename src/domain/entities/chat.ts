@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto'
+import { Entity } from '@/core/entities/entity'
 import { Slug } from './value-objecs/slug'
 
 // biome-ignore lint/style/useEnumInitializers:
@@ -12,27 +12,22 @@ type ChatProps = {
 	clientId: string
 	slug: Slug
 	status: ChatStatus
-	createdAt: Date
-	updatedAt: Date
 }
 
-export class Chat {
-	public id: string
-	public companyId: string
-	public slug: Slug
-	public clientId: string
-	public status: ChatStatus
-	public createdAt: Date
-	public updatedAt: Date
+export class Chat extends Entity<ChatProps> {
+	get companyId(): string {
+		return this.props.companyId
+	}
 
-	constructor(props: ChatProps, id?: string) {
-		const { companyId, clientId, status, createdAt, updatedAt, slug } = props
-		this.id = id ?? randomUUID().toString()
-		this.companyId = companyId
-		this.clientId = clientId
-		this.status = status
-		this.slug = slug
-		this.createdAt = createdAt ?? new Date()
-		this.updatedAt = updatedAt ?? new Date()
+	get clientId(): string {
+		return this.props.clientId
+	}
+
+	get slug(): Slug {
+		return this.props.slug
+	}
+
+	get status(): ChatStatus {
+		return this.props.status
 	}
 }

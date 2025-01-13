@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto'
+import { Entity } from '@/core/entities/entity'
 
 type CompanyProps = {
 	name: string
@@ -6,29 +6,26 @@ type CompanyProps = {
 	phone: string
 	aiConfig?: string
 	email?: string
-	createdAt?: Date
-	updatedAt?: Date
 }
 
-export class Company {
-	public id: string
-	public name: string
-	public CNPJ: string
-	public aiConfig?: string
-	public email?: string
-	public phone: string
-	public createdAt: Date
-	public updatedAt: Date
+export class Company extends Entity<CompanyProps> {
+	get name(): string {
+		return this.props.name
+	}
 
-	constructor(props: CompanyProps, id?: string) {
-		const { name, CNPJ, aiConfig, email, phone, createdAt, updatedAt } = props
-		this.id = id ?? randomUUID().toString()
-		this.name = name
-		this.CNPJ = CNPJ
-		this.aiConfig = aiConfig
-		this.email = email
-		this.phone = phone
-		this.createdAt = createdAt ?? new Date()
-		this.updatedAt = updatedAt ?? new Date()
+	get CNPJ(): string {
+		return this.props.CNPJ
+	}
+
+	get phone(): string {
+		return this.props.phone
+	}
+
+	get aiConfig(): string | undefined {
+		return this.props.aiConfig
+	}
+
+	get email(): string | undefined {
+		return this.props.email
 	}
 }
