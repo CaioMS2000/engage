@@ -1,0 +1,16 @@
+o Prisma ORM costuma mapear os enums do seu schema assim:
+
+export const AgentType_: {
+  AI: 'AI',
+  PERSON: 'PERSON'
+}
+
+export type AgentType = (typeof AgentType_)[keyof typeof AgentType_]
+
+
+export const AgentStatus_: {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE'
+}
+
+export type AgentStatus = (typeof AgentStatus_)[keyof typeof AgentStatus_]
