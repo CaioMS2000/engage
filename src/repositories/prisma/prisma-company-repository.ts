@@ -16,4 +16,16 @@ export class PrismaCompanyRepository implements CompanyRepository {
 			},
 		})
 	}
+
+	async findById(id: string) {
+		return prisma.company.findUnique({
+			where: {
+				id,
+			},
+			include: {
+				agents: true,
+				admins: true,
+			},
+		})
+	}
 }

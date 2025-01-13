@@ -1,4 +1,4 @@
-import { Company, Prisma } from '@prisma/client'
+import { Admin, Agent, Company, Prisma } from '@prisma/client'
 import { CompanyRepository } from '../company-repository'
 
 export class InMemoryCompanyRepository implements CompanyRepository {
@@ -24,4 +24,49 @@ export class InMemoryCompanyRepository implements CompanyRepository {
 	findByCNPJ(cnpj: string): Promise<Company | null> {
 		return Promise.resolve(this.items.find(item => item.cnpj === cnpj) ?? null)
 	}
+
+	findById(id: string): Promise<
+		| (Company & {
+				agents: Agent[]
+				admins: Admin[]
+		  })
+		| null
+	> {
+		const company = this.items.find(item => item.id === id)
+
+		if (!company) {
+			return Promise.resolve(null)
+		}
+
+		const fullCompany = {
+			...company,
+			agents: [],
+			admins: [],
+		}
+
+		return Promise.resolve(fullCompany)
+	}
 }
+
+// type Agent = {
+// 	name: string
+// 	id: string
+// 	email: string
+// 	createdAt: Date
+// 	updatedAt: Date
+// 	username: string
+// 	passwordHash: string
+// 	type: $Enums.AgentType
+// 	status: $Enums.AgentStatus
+// 	companyId: string
+// }
+
+// type Admin = {
+// 	name: string
+// 	id: string
+// 	email: string
+// 	createdAt: Date
+// 	updatedAt: Date
+// 	username: string
+// 	passwordHash: string
+// }
