@@ -2,7 +2,6 @@ import { InMemoryAdminRepository } from '@/repositories/in-memory/in-memory-admi
 import { InMemoryAgentRepository } from '@/repositories/in-memory/in-memory-agent-repository'
 import { InMemoryCompanyRepository } from '@/repositories/in-memory/in-memory-company-repository'
 import { hash } from 'bcryptjs'
-import { beforeEach, describe, expect, it } from 'vitest'
 import { UserNotFoundError } from './errors/user-not-found-error'
 import { GetAgentProfile } from './get-agent-profile'
 

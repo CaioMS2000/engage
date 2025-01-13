@@ -1,5 +1,4 @@
 import { InMemoryAdminRepository } from '@/repositories/in-memory/in-memory-admin-repository'
-import { beforeEach, describe, expect, it } from 'vitest'
 import { UserNotFoundError } from './errors/user-not-found-error'
 import { GetAdminProfile } from './get-admin-profile'
 

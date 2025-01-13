@@ -1,6 +1,5 @@
 import { InMemoryAdminRepository } from '@/repositories/in-memory/in-memory-admin-repository'
 import { hash } from 'bcryptjs'
-import { beforeEach, describe, expect, test } from 'vitest'
 import { AuthenticateAdmin } from './authenticate-admin'
 import { InvalidCredentialsError } from './errors/invalid-credentials-error'
 

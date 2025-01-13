@@ -2,7 +2,6 @@ import { InMemoryAdminRepository } from '@/repositories/in-memory/in-memory-admi
 import { InMemoryAgentRepository } from '@/repositories/in-memory/in-memory-agent-repository'
 import { InMemoryCompanyRepository } from '@/repositories/in-memory/in-memory-company-repository'
 import { hash } from 'bcryptjs'
-import { beforeEach, describe, expect, test } from 'vitest'
 import { AuthenticateAgent } from './authenticate-agent'
 import { InvalidCredentialsError } from './errors/invalid-credentials-error'
 

@@ -1,7 +1,6 @@
 import { InMemoryAdminRepository } from '@/repositories/in-memory/in-memory-admin-repository'
 import { InMemoryCompanyRepository } from '@/repositories/in-memory/in-memory-company-repository'
 import { hash } from 'bcryptjs'
-import { beforeEach, describe, expect, it } from 'vitest'
 import { CompanyNotFoundError } from './errors/company-not-found-error'
 import { GetCompanyInfo } from './get-company-info'
 

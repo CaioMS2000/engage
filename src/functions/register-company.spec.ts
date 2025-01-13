@@ -1,6 +1,6 @@
 import { InMemoryAdminRepository } from '@/repositories/in-memory/in-memory-admin-repository'
 import { InMemoryCompanyRepository } from '@/repositories/in-memory/in-memory-company-repository'
-import { beforeEach, describe, expect, test } from 'vitest'
+// import { beforeEach, describe, expect, test } from 'vitest'
 import { RegisterCompany } from './register-company'
 
 let companyRepository: InMemoryCompanyRepository

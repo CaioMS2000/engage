@@ -1,6 +1,5 @@
 import { InMemoryAdminRepository } from '@/repositories/in-memory/in-memory-admin-repository'
 import { compare } from 'bcryptjs'
-import { beforeEach, describe, expect, test } from 'vitest'
 import {
 	UserEmailAlreadyInUseError,
 	UserUsernameAlreadyInUseError,
