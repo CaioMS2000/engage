@@ -7,6 +7,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Admin {
+  id           String    @id @default(uuid())
+  name         String
+  email        String    @unique
+  username     String    @unique
+  passwordHash String    @map("password_hash")
+  companies    Company[]
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  @@map("admin")
+}
+
 model Company {
   id        String   @id @default(uuid())
   name      String
@@ -21,31 +34,6 @@ model Company {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("company")
-}
-
-model Admin {
-  id           String    @id @default(uuid())
-  name         String
-  email        String    @unique
-  username     String    @unique
-  passwordHash String    @map("password_hash")
-  companies    Company[]
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt @map("updated_at")
-
-  @@map("admin")
-}
-
-model Client {
-  id        String   @id @default(uuid())
-  name      String
-  email     String?
-  phone     String   @unique
-  chats     Chat[]   @relation("client-chat")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("client")
 }
 
 enum AgentStatus {
@@ -80,6 +68,25 @@ model Agent {
   @@map("agent")
 }
 
+model Client {
+  id        String   @id @default(uuid())
+  name      String
+  email     String?
+  phone     String   @unique
+  chats     Chat[]   @relation("client-chat")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("client")
+}
+
+enum ChatStatus {
+  OPEN
+  CLOSED
+
+  @@map("chat-status")
+}
+
 model Chat {
   id        String        @id @default(uuid())
   companyId String        @map("company_id")
@@ -94,13 +101,6 @@ model Chat {
   client  Client  @relation("client-chat", fields: [clientId], references: [id])
 
   @@map("chat")
-}
-
-enum ChatStatus {
-  OPEN
-  CLOSED
-
-  @@map("chat-status")
 }
 
 enum AuthorType {
