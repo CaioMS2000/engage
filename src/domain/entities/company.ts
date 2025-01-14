@@ -1,4 +1,5 @@
 import { Entity } from '@/core/entities/entity'
+import { UniqueID } from '@/core/entities/unique-id'
 
 type CompanyProps = {
 	name: string
@@ -27,5 +28,9 @@ export class Company extends Entity<CompanyProps> {
 
 	get email(): string | undefined {
 		return this.props.email
+	}
+
+	static create(props: CompanyProps, id?: UniqueID) {
+		return new Company({ ...props }, id)
 	}
 }

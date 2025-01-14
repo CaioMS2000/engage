@@ -24,4 +24,8 @@ export class AgentSwitch extends Entity<AgentSwitchProps> {
 	get endDate(): Date {
 		return this.props.endDate
 	}
+
+	static create(props: AgentSwitchProps, id?: UniqueID) {
+		return new AgentSwitch({ ...props }, id)
+	}
 }

@@ -1,4 +1,5 @@
 import { Entity } from '@/core/entities/entity'
+import { UniqueID } from '@/core/entities/unique-id'
 
 type AdminProps = {
 	name: string
@@ -22,5 +23,9 @@ export class Admin extends Entity<AdminProps> {
 
 	get passwordHash(): string {
 		return this.props.passwordHash
+	}
+
+	static create(props: AdminProps, id?: UniqueID) {
+		return new Admin({ ...props }, id)
 	}
 }

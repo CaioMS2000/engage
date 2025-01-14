@@ -51,4 +51,8 @@ export class Agent extends Entity<AgentProps> {
 	get companyId() {
 		return this.props.companyId
 	}
+
+	static create(props: AgentProps, id?: UniqueID) {
+		return new Agent({ ...props }, id)
+	}
 }

@@ -1,4 +1,5 @@
 import { Entity } from '@/core/entities/entity'
+import { UniqueID } from '@/core/entities/unique-id'
 
 // biome-ignore lint/style/useEnumInitializers:
 enum AuthorType {
@@ -34,5 +35,9 @@ export class Message extends Entity<MessageProps> {
 
 	get sentAt(): Date {
 		return this.props.sentAt
+	}
+
+	static create(props: MessageProps, id?: UniqueID) {
+		return new Message({ ...props }, id)
 	}
 }

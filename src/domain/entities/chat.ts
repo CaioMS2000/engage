@@ -31,4 +31,8 @@ export class Chat extends Entity<ChatProps> {
 	get status(): ChatStatus {
 		return this.props.status
 	}
+
+	static create(props: ChatProps, id?: UniqueID) {
+		return new Chat({ ...props }, id)
+	}
 }
