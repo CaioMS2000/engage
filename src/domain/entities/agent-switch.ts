@@ -1,18 +1,19 @@
 import { Entity } from '@/core/entities/entity'
+import { UniqueID } from '@/core/entities/unique-id'
 
 type AgentSwitchProps = {
-	chatId: string
-	agentId: string
+	chatId: UniqueID
+	agentId: UniqueID
 	startDate: Date
 	endDate: Date
 }
 
 export class AgentSwitch extends Entity<AgentSwitchProps> {
-	get chatId(): string {
+	get chatId() {
 		return this.props.chatId
 	}
 
-	get agentId(): string {
+	get agentId() {
 		return this.props.agentId
 	}
 

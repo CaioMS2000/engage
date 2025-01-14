@@ -1,4 +1,5 @@
 import { Entity } from '@/core/entities/entity'
+import { UniqueID } from '@/core/entities/unique-id'
 import { Slug } from './value-objecs/slug'
 
 // biome-ignore lint/style/useEnumInitializers:
@@ -8,18 +9,18 @@ enum ChatStatus {
 }
 
 type ChatProps = {
-	companyId: string
-	clientId: string
+	companyId: UniqueID
+	clientId: UniqueID
 	slug: Slug
 	status: ChatStatus
 }
 
 export class Chat extends Entity<ChatProps> {
-	get companyId(): string {
+	get companyId() {
 		return this.props.companyId
 	}
 
-	get clientId(): string {
+	get clientId() {
 		return this.props.clientId
 	}
 

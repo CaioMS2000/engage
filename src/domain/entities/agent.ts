@@ -1,4 +1,5 @@
 import { Entity } from '@/core/entities/entity'
+import { UniqueID } from '@/core/entities/unique-id'
 
 // biome-ignore lint/style/useEnumInitializers:
 enum AgentType {
@@ -19,7 +20,7 @@ type AgentProps = {
 	passwordHash: string
 	type: AgentType
 	status: AgentStatus
-	companyId: string
+	companyId: UniqueID
 }
 
 export class Agent extends Entity<AgentProps> {
@@ -47,7 +48,7 @@ export class Agent extends Entity<AgentProps> {
 		return this.props.status
 	}
 
-	get companyId(): string {
+	get companyId() {
 		return this.props.companyId
 	}
 }
