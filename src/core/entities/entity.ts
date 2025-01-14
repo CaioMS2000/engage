@@ -6,6 +6,10 @@ export class Entity<Props> {
 	protected updatedAt: Date
 	protected props: Props
 
+	protected touch() {
+		this.updatedAt = new Date()
+	}
+
 	get id() {
 		return this.id_
 	}

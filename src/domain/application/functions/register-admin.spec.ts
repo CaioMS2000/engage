@@ -1,4 +1,4 @@
-import { AdminRepository } from '@/domain/repositories/admin-repository'
+import { AdminRepository } from '@/domain/application/repositories/admin-repository'
 import { InMemoryAdminRepository } from 'test/repositories/in-memory-admin-repository'
 import { RegisterAdmin } from './register-admin'
 
