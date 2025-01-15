@@ -1,7 +1,7 @@
 import { Entity } from '@/core/entities/entity'
 import { UniqueID } from '@/core/entities/unique-id'
 
-type AdminProps = {
+export type AdminProps = {
 	name: string
 	email: string
 	username: string

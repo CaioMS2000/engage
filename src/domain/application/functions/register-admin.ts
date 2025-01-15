@@ -19,7 +19,7 @@ export class RegisterAdmin {
 	async exec(request: RegisterAdminRequest): Promise<RegisterAdminResponse> {
 		const { name, email, username, password } = request
 		const passwordHash = await hash(password, 6)
-		const admin = new Admin({ name, email, username, passwordHash })
+		const admin = Admin.create({ name, email, username, passwordHash })
 
 		await this.adminRepository.create(admin)
 
