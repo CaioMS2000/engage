@@ -12,15 +12,16 @@ describe('Register admin', () => {
 	})
 
 	it('should register an admin', async () => {
-		const { admin } = await fn.exec({
+		const res = await fn.exec({
 			name: 'John Doe',
 			email: 'john.doe@example.com',
 			username: 'johndoe',
 			password: '123456',
 		})
-
-		expect(admin.id).toBeDefined()
-		expect(admin.id).toEqual(
+		expect(res.isRight()).toBe(true)
+		expect(res.isLeft()).toBe(false)
+		expect(res.value.admin.id).toBeDefined()
+		expect(res.value.admin.id).toEqual(
 			expect.objectContaining({ value: expect.any(String) })
 		)
 	})

@@ -1,3 +1,4 @@
+import { Either, right } from '@/core/either'
 import { AdminRepository } from '@/domain/application/repositories/admin-repository'
 import { Admin } from '@/domain/enterprise/entities/admin'
 import { hash } from 'bcryptjs'
@@ -9,9 +10,12 @@ type RegisterAdminRequest = {
 	password: string
 }
 
-type RegisterAdminResponse = {
-	admin: Admin
-}
+type RegisterAdminResponse = Either<
+	null,
+	{
+		admin: Admin
+	}
+>
 
 export class RegisterAdmin {
 	constructor(private adminRepository: AdminRepository) {}
@@ -23,6 +27,6 @@ export class RegisterAdmin {
 
 		await this.adminRepository.create(admin)
 
-		return { admin }
+		return right({ admin })
 	}
 }
