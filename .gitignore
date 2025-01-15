@@ -38,3 +38,4 @@ prisma/migrations/
 # mine
 /old
 /.husky/_
+/data
