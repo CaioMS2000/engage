@@ -9,19 +9,19 @@ enum AuthorType {
 }
 
 type MessageProps = {
-	chatId: string
-	authorId: string
+	chatId: UniqueID
+	authorId: UniqueID
 	authorType: AuthorType
 	content: string
 	sentAt: Date
 }
 
 export class Message extends Entity<MessageProps> {
-	get chatId(): string {
+	get chatId() {
 		return this.props.chatId
 	}
 
-	get authorId(): string {
+	get authorId() {
 		return this.props.authorId
 	}
 

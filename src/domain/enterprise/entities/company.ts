@@ -2,6 +2,7 @@ import { Entity } from '@/core/entities/entity'
 import { UniqueID } from '@/core/entities/unique-id'
 
 type CompanyProps = {
+	adminId: UniqueID
 	name: string
 	CNPJ: string
 	phone: string
@@ -10,6 +11,10 @@ type CompanyProps = {
 }
 
 export class Company extends Entity<CompanyProps> {
+	get adminId() {
+		return this.props.adminId
+	}
+
 	get name(): string {
 		return this.props.name
 	}

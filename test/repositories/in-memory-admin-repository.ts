@@ -7,4 +7,14 @@ export class InMemoryAdminRepository implements AdminRepository {
 	async create(admin: Admin): Promise<void> {
 		this.admins.push(admin)
 	}
+
+	findByID(id: string): Promise<Admin | null> {
+		const admin = this.admins.find(admin => admin.id.toString() === id)
+
+		if (!admin) {
+			return Promise.resolve(null)
+		}
+
+		return Promise.resolve(admin)
+	}
 }
